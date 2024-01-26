@@ -3,4 +3,6 @@ html_cov/*
 .coverage
 .vscode
 *.pyc
-venv/*
+venv
+pddata
+postgres.env
