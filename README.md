@@ -77,3 +77,23 @@
     ```
 
 5. Перейдите по адресу http://localhost:8000/swagger/ или http://localhost:8000/redoc/ для вывода документации.
+
+## Запуск контейнеров через docker-compose  
+
+1. Клонируйте репозиторий:  
+
+    ```bash
+    git clone https://github.com:BungaaFACE/Bungaa_Motivator_DRF.git
+    ```
+    
+2. Настройте проект под ваши нужды:  
+  
+    Переименуйте .env.tpl и postgres.env.tpl в .env и postgres.env, и настройте параметры.  
+  
+3. Запуск построение и запуск контейнеров:  
+  
+    ```bash
+    docker-compose up
+    ```
+
+4. Перейдите по адресу http://localhost:8001/swagger/ или http://localhost:8001/redoc/ для вывода документации.
