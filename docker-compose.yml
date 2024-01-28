@@ -6,10 +6,10 @@ services:
     env_file:
       - .env
     environment:
-      - POSTGRES_DB="${DB_NAME}"
-      - POSTGRES_USER="${DB_USER}"
-      - POSTGRES_PASSWORD="${DB_PASSWORD}"
-      - PGUSER="${DB_USER}"
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - PGUSER=${DB_USER}
     volumes:
       - ./pddata:/var/lib/postgresql/data
     healthcheck:
@@ -32,6 +32,11 @@ services:
       - "8001:8000"
     env_file:
       - .env
+    healthcheck:
+      test: "curl --fail  http://127.0.0.1:8000/swagger/"
+      interval: 5s
+      timeout: 5s
+      retries: 20
     depends_on:
       db:
         condition: service_healthy
@@ -39,20 +44,18 @@ services:
   celery:
     build: .
     tty: true
-    # sleep 10 for django migrate process
-    command: sh -c "sleep 10 && celery -A config worker -l INFO --hostname redis"
+    command: celery -A config worker -l INFO --hostname redis
     depends_on:
-      - redis
-      - api
+      api:
+        condition: service_healthy
 
   celery_beat:
     build: .
     tty: true
-    # sleep 10 for django migrate process
-    command: sh -c "sleep 10 && celery -A config beat -l INFO -S django"
+    command: celery -A config beat -l INFO -S django
     depends_on:
-      - redis
-      - api
+      api:
+        condition: service_healthy
 
 volumes:
   pddata:
